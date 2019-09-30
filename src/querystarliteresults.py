@@ -7,6 +7,7 @@
 import pandas as pd
 import os, json
 import re
+import pyodbc
 
 
 # In[36]:
@@ -126,21 +127,23 @@ else:
 # In[ ]:
 
 
-import pyodbc
-server = '<Enter Startlite Server Name>'
-database = '<Enter Database Name>'
-username = '<User Name>'
-password = '<Password>'
-driver= '{ODBC Driver 17 for SQL Server}'
-cnxn = pyodbc.connect('DRIVER='+driver+';SERVER='+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
-cursor = cnxn.cursor()
-cursor.execute(newQuery)
-row = cursor.fetchone()
-result="\n\n"+str1+"\n"
-while row:
-    for column in row:
-        result+=str(column)+"    "
-    print (result)
-    result=""
+def queryStarlite(newQuery):
+    server = '<Hostname of Startlite Instance>'
+    database = '<Database Name>'
+    username = '<Username>'
+    password = '<Password>'
+    driver= '{ODBC Driver 17 for SQL Server}'
+    cnxn = pyodbc.connect('DRIVER='+driver+';SERVER='+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
+    cursor = cnxn.cursor()
+    cursor.execute(newQuery)
     row = cursor.fetchone()
+    result="\n\n"+str1+"\n"
+    while row:
+        for column in row:
+            result+=str(column)+"    "
+        print (result)
+        result=""
+        row = cursor.fetchone()
+
+queryStarlite(newQuery)    
 
